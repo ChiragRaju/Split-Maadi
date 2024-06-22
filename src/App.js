@@ -73,6 +73,13 @@ const FormTitle = styled(Typography)(({ theme }) => ({
 const FormButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
+const Trademark = styled(Typography)(({ theme }) => ({
+  position: "absolute",
+  bottom: theme.spacing(1),
+  right: theme.spacing(2),
+  color: "#888", // Adjust color as needed
+  fontStyle: "italic",
+}));
 
 export default function App() {
   const [friends, setFriends] = useState(initialFriends);
@@ -150,6 +157,9 @@ export default function App() {
             key={selectedFriend.id}
           />
         )}
+         <Trademark variant="body2">
+           @Chirag Raju
+        </Trademark>
       </FormContainer>
     </Container>
   );
