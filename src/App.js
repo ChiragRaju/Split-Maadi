@@ -31,13 +31,13 @@ const initialFriends = [
     id: 1,
     name: "Nithin LN",
     image: nithin,
-    balance: -7,
+    balance:1000,
   },
   {
     id: 2,
-    name: "Sunil Kumar M",
+    name: "Sunil Kumar M Patil",
     image: sunil,
-    balance: 20,
+    balance: -20000,
   },
   {
     id: 3,
