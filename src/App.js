@@ -2,7 +2,7 @@ import { useState } from "react";
 import sunil from "./Images/sunil.jpg";
 import nithin from "./Images/nithin.jpg";
 import gagan from "./Images/gagan.jpg";
-import sreejith from "./Images/sreejith.jpg";
+
 import shanu from "./Images/shanu.jpg";
 
 import {
@@ -24,7 +24,11 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { Add as AddIcon, Close as CloseIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import {
+  Add as AddIcon,
+  Close as CloseIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
 import { styled } from "@mui/system";
 
 const initialFriends = [
@@ -48,16 +52,10 @@ const initialFriends = [
   },
   {
     id: 4,
-    name: "Sreejith",
-    image: sreejith,
-    balance: 600,
-  },
-  {
-    id: 5,
     name: "Shanu MC",
     image: shanu,
     balance: 1500,
-  }
+  },
 ];
 
 const FormContainer = styled(Paper)(({ theme }) => ({
@@ -172,9 +170,7 @@ export default function App() {
           />
         )}
 
-        <Trademark variant="body2">
-          @Chirag Raju
-        </Trademark>
+        <Trademark variant="body2">@Chirag Raju</Trademark>
       </FormContainer>
     </Container>
   );
@@ -241,7 +237,6 @@ function Friend({ friend, onSelection, selectedFriend, onDeleteFriend }) {
         }}
       />
       <ListItemSecondaryAction>
-       
         <IconButton
           edge="end"
           aria-label="select"
