@@ -3,7 +3,6 @@ import sunil from "./Images/sunil.jpg";
 import nithin from "./Images/nithin.jpg";
 import gagan from "./Images/gagan.jpg";
 import sreejith from "./Images/sreejith.jpg";
-// import icon from "./Images/icon.png"; // Add your icon image
 
 import {
   Button,
@@ -23,30 +22,34 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  AppBar,
-  Toolbar,
 } from "@mui/material";
 import { Add as AddIcon, Close as CloseIcon } from "@mui/icons-material";
 import { styled } from "@mui/system";
 
 const initialFriends = [
   {
-    id: 118836,
+    id: 1,
     name: "Nithin LN",
     image: nithin,
     balance: -7,
   },
   {
-    id: 933372,
+    id: 2,
     name: "Sunil Kumar M",
     image: sunil,
     balance: 20,
   },
   {
-    id: 499476,
+    id: 3,
     name: "Gagan",
     image: gagan,
     balance: 0,
+  },
+  {
+    id: 4,
+    name: "Sreejith",
+    image: sreejith,
+    balance: 600,
   },
 ];
 
@@ -56,7 +59,6 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   marginTop: theme.spacing(2),
   borderRadius: theme.shape.borderRadius,
   maxWidth: "600px",
-  margin: "auto",
   width: "100%",
 }));
 
@@ -91,11 +93,15 @@ export default function App() {
     setShowAddFriend(false);
   }
 
-  function handleSplitBill(value) {
+  function handleSplitBill({ amount, reason }) {
     setFriends((friends) =>
       friends.map((friend) =>
         friend.id === selectedFriend.id
-          ? { ...friend, balance: friend.balance + value }
+          ? {
+              ...friend,
+              balance: friend.balance + amount,
+              reason: reason, // Store reason in the friend object
+            }
           : friend
       )
     );
@@ -104,11 +110,19 @@ export default function App() {
   }
 
   return (
-    <Container>
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
       <FormContainer elevation={4}>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            Split-Madi
-          </Typography>
+        <Typography variant="h5" style={{ flexGrow: 1, textAlign: "center" }}>
+          Split-Maadi Please....
+        </Typography>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <FormTitle variant="h4">Friends</FormTitle>
           <FormButton
@@ -176,11 +190,20 @@ function Friend({ friend, onSelection, selectedFriend }) {
       <ListItemText
         primary={friend.name}
         secondary={
-          friend.balance < 0
-            ? `You owe ${friend.name} ₹${Math.abs(friend.balance)}`
-            : friend.balance > 0
-            ? `Your friend ${friend.name} owes you ₹${Math.abs(friend.balance)}`
-            : `You and ${friend.name} are even`
+          <>
+            {friend.balance < 0
+              ? `You owe ${friend.name} ₹${Math.abs(friend.balance)}`
+              : friend.balance > 0
+              ? `Your friend ${friend.name} owes you ₹${Math.abs(
+                  friend.balance
+                )}`
+              : `You and ${friend.name} has no due`}
+            {friend.reason && (
+              <Typography variant="body2" color="textSecondary">
+                Spent On: {friend.reason}
+              </Typography>
+            )}
+          </>
         }
         secondaryTypographyProps={{
           color:
@@ -257,12 +280,17 @@ function FormSplitBill({ selectedFriend, onSplitBill }) {
   const [paidByUser, setPaidByUser] = useState("");
   const paidByFriend = bill ? bill - paidByUser : "";
   const [whoIsPaying, setWhoIsPaying] = useState("user");
+  const [reason, setReason] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
 
     if (!bill || !paidByUser) return;
-    onSplitBill(whoIsPaying === "user" ? paidByFriend : -paidByUser);
+
+    onSplitBill({
+      amount: whoIsPaying === "user" ? paidByFriend : -paidByUser,
+      reason: reason.trim() || "No reason provided",
+    });
   }
 
   return (
@@ -312,6 +340,14 @@ function FormSplitBill({ selectedFriend, onSplitBill }) {
           <MenuItem value="friend">{selectedFriend.name}</MenuItem>
         </Select>
       </FormControl>
+      <TextField
+        fullWidth
+        label="Spent On"
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        variant="outlined"
+        margin="normal"
+      />
       <FormButton type="submit" variant="contained" color="primary" fullWidth>
         Split bill
       </FormButton>
