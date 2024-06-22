@@ -3,6 +3,7 @@ import sunil from "./Images/sunil.jpg";
 import nithin from "./Images/nithin.jpg";
 import gagan from "./Images/gagan.jpg";
 import sreejith from "./Images/sreejith.jpg";
+import shanu from "./Images/shanu.jpg";
 
 import {
   Button,
@@ -23,7 +24,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { Add as AddIcon, Close as CloseIcon } from "@mui/icons-material";
+import { Add as AddIcon, Close as CloseIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { styled } from "@mui/system";
 
 const initialFriends = [
@@ -31,7 +32,7 @@ const initialFriends = [
     id: 1,
     name: "Nithin LN",
     image: nithin,
-    balance:1000,
+    balance: 1000,
   },
   {
     id: 2,
@@ -51,6 +52,12 @@ const initialFriends = [
     image: sreejith,
     balance: 600,
   },
+  {
+    id: 5,
+    name: "Shanu MC",
+    image: shanu,
+    balance: 1500,
+  }
 ];
 
 const FormContainer = styled(Paper)(({ theme }) => ({
@@ -73,6 +80,7 @@ const FormTitle = styled(Typography)(({ theme }) => ({
 const FormButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
+
 const Trademark = styled(Typography)(({ theme }) => ({
   position: "absolute",
   bottom: theme.spacing(1),
@@ -116,6 +124,11 @@ export default function App() {
     setSelectedFriend(null);
   }
 
+  function handleDeleteFriend(id) {
+    setFriends((friends) => friends.filter((friend) => friend.id !== id));
+    setSelectedFriend(null); // Deselect friend if deleted
+  }
+
   return (
     <Container
       maxWidth="sm"
@@ -148,6 +161,7 @@ export default function App() {
           friends={friends}
           selectedFriend={selectedFriend}
           onSelection={handleSelection}
+          onDeleteFriend={handleDeleteFriend}
         />
 
         {selectedFriend && (
@@ -157,15 +171,16 @@ export default function App() {
             key={selectedFriend.id}
           />
         )}
-         <Trademark variant="body2">
-           @Chirag Raju
+
+        <Trademark variant="body2">
+          @Chirag Raju
         </Trademark>
       </FormContainer>
     </Container>
   );
 }
 
-function FriendsList({ friends, onSelection, selectedFriend }) {
+function FriendsList({ friends, onSelection, selectedFriend, onDeleteFriend }) {
   return (
     <List>
       {friends.map((friend) => (
@@ -174,13 +189,14 @@ function FriendsList({ friends, onSelection, selectedFriend }) {
           key={friend.id}
           selectedFriend={selectedFriend}
           onSelection={onSelection}
+          onDeleteFriend={onDeleteFriend}
         />
       ))}
     </List>
   );
 }
 
-function Friend({ friend, onSelection, selectedFriend }) {
+function Friend({ friend, onSelection, selectedFriend, onDeleteFriend }) {
   const isSelected = selectedFriend?.id === friend.id;
 
   return (
@@ -225,12 +241,20 @@ function Friend({ friend, onSelection, selectedFriend }) {
         }}
       />
       <ListItemSecondaryAction>
+       
         <IconButton
           edge="end"
           aria-label="select"
           onClick={() => onSelection(friend)}
         >
           {isSelected ? <CloseIcon /> : <AddIcon />}
+        </IconButton>
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={() => onDeleteFriend(friend.id)}
+        >
+          <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>
     </ListItem>
